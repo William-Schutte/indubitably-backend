@@ -3,9 +3,7 @@ const path = require('path');
 
 module.exports = (req, res, next) => {
 
-  let url = 'https://www.indeed.com/jobs?q=react%20developer&explvl=entry_level&sort=date&fromage=14&limit=50';
-
-  const childPython = spawn('python3', [path.join(__dirname, '../ind-back-end/web-requests.py'), url]);
+  const childPython = spawn('python3', [path.join(__dirname, '../ind-back-end/web-scraper.py')]);
 
   childPython.stdout.on('data', (data) => {
     console.log(data.toString());

@@ -1,10 +1,11 @@
 from bs4 import BeautifulSoup
 import json
+import os
 
 jobs_master_list = []
 
-for i in range(0, 5):
-    file_name = 'indeed%s.html' % str(i)
+for i in range(0, 1):
+    file_name = './bufferdata/indeed%s.html' % str(i)
 
     try:
         with open(file_name, 'r') as html_file:
@@ -54,11 +55,14 @@ for i in range(0, 5):
                     'summary': job_summary,
                     'reqs': job_reqs
                 })
+
+        os.remove('./bufferdata/indeed%s.html' % str(i))
+
     except:
         print('%i HTML Files Read') % i+1
 
 # Write the list of job objects to JSON file
-with open('data.json', 'w') as outfile:
+with open('./ind-back-end/data.json', 'w') as outfile:
     json.dump(jobs_master_list, outfile)
 
 print(len(jobs_master_list))
