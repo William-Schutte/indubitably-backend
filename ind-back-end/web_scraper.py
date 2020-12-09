@@ -4,7 +4,7 @@ import os
 
 jobs_master_list = []
 
-for i in range(0, 1):
+for i in range(0, 3):
     file_name = './bufferdata/indeed%s.html' % str(i)
 
     try:

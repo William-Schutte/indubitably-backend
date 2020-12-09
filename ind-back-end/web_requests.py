@@ -14,13 +14,12 @@ soup = BeautifulSoup(html_text, 'lxml')
 # Best to round down a bit.
 page_count = soup.find('div', id='searchCountPages').text.strip()
 page_count = page_count.replace('Page 1 of ', '')
-page_count = round(int(page_count.replace(' jobs', '')) / 50)
+page_count = page_count.replace(' jobs', '')
+page_count = round(int(page_count.replace(',', '')) / 50)
 if (page_count == 0):
     page_count = 1
-elif (page_count > 5):
-    page_count = 5
-
-page_count = 1
+elif (page_count > 3):
+    page_count = 3
 
 # Write the first page of results to an html file
 file_name = data_dir + "indeed0.html"
