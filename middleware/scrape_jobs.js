@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
   });
 
   childPython.on('close', (code) => {
-    console.log(`Exited with code ${code}`);
+    console.log(`Web scrape status: ${code}`);
     next();
   });
 };

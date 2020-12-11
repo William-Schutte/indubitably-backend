@@ -6,5 +6,5 @@ module.exports = (req, res, next) => {
   const data = fs.readFileSync(path.join(__dirname, '../ind-back-end/data.json'));
   const jobs = JSON.parse(data);
 
-  res.status(200).send(jobs);
+  // res.status(200).send({ totalJobs: req.body.number, jobs });
 };
