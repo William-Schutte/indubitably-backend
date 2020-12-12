@@ -19,10 +19,13 @@
   "homepage": "https://github.com/William-Schutte/indubitably-backend#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "bull": "^3.20.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
-    "graphql": "^15.4.0"
+    "graphql": "^15.4.0",
+    "redis": "^3.0.2",
+    "redis-server": "^1.2.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
