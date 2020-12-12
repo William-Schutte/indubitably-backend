@@ -20,7 +20,10 @@ pages_to_search = round(int(jobs_count.replace(',', '')) / 50)
 if (pages_to_search == 0):
     pages_to_search = 1
 elif (pages_to_search > 5):
-    pages_to_search = 5
+    pages_to_search = 1
+#####
+# CHANGE BACK TO DESIRED RANGE ^^
+#####
 
 # Write the first page of results to an html file
 file_name = data_dir + "indeed0.html"

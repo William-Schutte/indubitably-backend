@@ -3,8 +3,14 @@ const fs = require('fs');
 const path = require('path')
 
 module.exports = (req, res, next) => {
-  const data = fs.readFileSync(path.join(__dirname, '../ind-back-end/data.json'));
-  const jobs = JSON.parse(data);
+  try {
+    const data = fs.readFileSync(path.join(__dirname, `../bufferdata/data${req.params.id}.json`));
+    const jobs = JSON.parse(data);
+    res.status(200).send({ total: jobs[0].total, jobs: jobs.slice(1) });
 
-  // res.status(200).send({ totalJobs: req.body.number, jobs });
+    fs.unlinkSync(path.join(__dirname, `../bufferdata/data${req.params.id}.json`));
+
+  } catch (err) {
+    res.status(404).send('File not found')
+  }
 };
