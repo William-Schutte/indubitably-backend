@@ -1,9 +1,11 @@
 from bs4 import BeautifulSoup
+import os.path
 import requests
 import sys
 
 base_url = sys.argv[1]
-data_dir = './bufferdata/'
+data_dir = os.path.join(os.path.abspath(
+    os.path.dirname(__file__)), '../bufferdata/')
 # base_url = 'https://www.indeed.com/jobs?q=react%20developer&explvl=entry_level&sort=date&fromage=14&limit=50'
 
 html_text = requests.get(base_url).text
@@ -28,6 +30,7 @@ elif (pages_to_search > 5):
 
 # Write the first page of results to an html file
 file_name = data_dir + "indeed0.html"
+
 new_file = open(file_name, 'w+')
 new_file.write(html_text)
 new_file.close()

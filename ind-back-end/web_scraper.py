@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import json
 import os
+import os.path
 import sys
 import csv
 
@@ -10,7 +11,12 @@ total_jobs = sys.argv[2]
 jobs_master_list = [{'total': total_jobs}]
 cities_master_list = []
 
-with open("./ind-back-end/uscities.csv", "r") as csvfile:
+cities_data_path = os.path.join(os.path.abspath(
+    os.path.dirname(__file__)), 'uscities.csv')
+data_dir = os.path.join(os.path.abspath(
+    os.path.dirname(__file__)), '../bufferdata/')
+
+with open(cities_data_path, "r") as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
         cities_master_list.append(row)
@@ -26,7 +32,7 @@ def get_location(city, state):
 
 
 for i in range(5):
-    file_name = './bufferdata/indeed%s.html' % str(i)
+    file_name = data_dir + 'indeed%s.html' % str(i)
 
     if os.path.isfile(file_name):
 
@@ -85,13 +91,13 @@ for i in range(5):
                         'reqs': job_reqs,
                         'blockId': jobid,
                     })
-            os.remove('./bufferdata/indeed%s.html' % str(i))
+            os.remove(data_dir + 'indeed%s.html' % str(i))
 
         except IOError:
             print('%s HTML Files Read') % str(i+1)
 
 # Write the list of job objects to JSON file
-file_name = './bufferdata/data%s.json' % str(jobid)
+file_name = data_dir + 'data%s.json' % str(jobid)
 with open(file_name, 'w+') as outfile:
     json.dump(jobs_master_list, outfile)
 
