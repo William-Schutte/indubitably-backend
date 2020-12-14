@@ -28,7 +28,7 @@ elif (pages_to_search > 5):
 
 # Write the first page of results to an html file
 file_name = data_dir + "indeed0.html"
-new_file = open(file_name, 'w')
+new_file = open(file_name, 'w+')
 new_file.write(html_text)
 new_file.close()
 
@@ -37,7 +37,7 @@ new_file.close()
 for i in range(1, pages_to_search):
     html_text = requests.get(base_url + '&start=' + str(i * 50)).text
     file_name = data_dir + "indeed%s.html" % str(i)
-    new_file = open(file_name, "w")
+    new_file = open(file_name, "w+")
     new_file.write(html_text)
     new_file.close()
 

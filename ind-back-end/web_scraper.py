@@ -92,7 +92,7 @@ for i in range(5):
 
 # Write the list of job objects to JSON file
 file_name = './bufferdata/data%s.json' % str(jobid)
-with open(file_name, 'w') as outfile:
+with open(file_name, 'w+') as outfile:
     json.dump(jobs_master_list, outfile)
 
 print(len(jobs_master_list))
