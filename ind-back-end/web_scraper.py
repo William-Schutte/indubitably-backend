@@ -26,9 +26,7 @@ def get_location(city, state):
     state_list = [row for row in cities_master_list if row[1]
                   == state]
     city_found = [row for row in state_list if row[0] == city]
-
     return city_found
-    # return {'long': city_found[0][3], 'latt': city_found[0][2]}
 
 
 for i in range(5):
