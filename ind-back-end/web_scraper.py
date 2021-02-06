@@ -29,6 +29,13 @@ def get_location(city, state):
     return city_found
 
 
+def get_posted_days(raw_info):
+    if raw_info in ["Just posted", "Today"]:
+        return "Today"
+    else:
+        return raw_info
+
+
 for i in range(5):
     file_name = data_dir + 'indeed%s.html' % str(i)
 
@@ -54,7 +61,8 @@ for i in range(5):
 
                     job_company = job.find(
                         'span', class_='company').text.strip()
-                    job_posted = job.find('span', class_='date').text.strip()
+                    job_posted = get_posted_days(
+                        job.find('span', class_='date').text.strip())
                     job_location = job.find(
                         'div', class_='recJobLoc').attrs['data-rc-loc']
                     job_coords = get_location(
