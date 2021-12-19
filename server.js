@@ -13,6 +13,6 @@ const app = express()
 app.use(cors());
 app.use(bodyParser.json());
 
-app.post('/search', searchForJobs, saveJobsToDB);
+app.post('/load-to-db', searchForJobs, saveJobsToDB);
 
 app.listen(3000, () => console.log('Server listening on Port 3000'));

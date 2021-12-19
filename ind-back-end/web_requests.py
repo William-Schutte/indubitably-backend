@@ -24,41 +24,47 @@ def get_more_pages(url, n):
 def parse_job_data_from_pages(l):
     # This works as of 12/18/21
     # Due to the nature of webdevelopment and web-scraping, this will need constant maintenance
+    # Takes a list of pages of job entries
+    job_data = []
     for page in l:
         job_entries = page.find_all('a', class_='fs-unmask')
-        job_data = []
         for job in job_entries:
-            jobTitle = job.find('h2', class_='jobTitle').find_all('span')
-            jobTitle = jobTitle[1].string if len(jobTitle) > 1 else jobTitle[0].string
-            jobCompany = job.find('span', class_='companyName').string
-            jobLocation = job.find('div', class_='companyLocation').string
-            jobPay = job.find('div', class_='salary-snippet-container')
-            if not jobPay:
-                jobPay = ''
-            else:
-                jobPay = jobPay.get_text()
-            # Currently date span contains a span with a keyword, either 'Posted' or 'Employed'
-            # Then the visible text. E.g. <><span>Posted</span>Today<>
-            jobPosted = ''
-            for s in job.find('span', class_='date').stripped_strings:
-                jobPosted + s + ' '
-            # Job info is an ul of bullet points about the job
-            jobInfo = job.find('div', class_='job-snippet').find_all('li')
-            jobInfoSnippets = []
-            for item in jobInfo:
-                jobInfoSnippets.append(item.string)
-            jobLink = job['href']
+            try:
+                jobId = job['id']
+                jobTitle = job.find('h2', class_='jobTitle').find_all('span')
+                jobTitle = jobTitle[1].string if len(jobTitle) > 1 else jobTitle[0].string
+                jobCompany = job.find('span', class_='companyName').string
+                jobLocation = job.find('div', class_='companyLocation').string
+                jobPay = job.find('div', class_='salary-snippet-container')
+                if not jobPay:
+                    jobPay = ''
+                else:
+                    jobPay = jobPay.get_text()
+                # Currently date span contains a span with a keyword, either 'Posted' or 'Employed'
+                # Then the visible text. E.g. <><span>Posted</span>Today<>
+                jobPosted = ''
+                for s in job.find('span', class_='date').stripped_strings:
+                    jobPosted + s + ' '
+                # Job info is an ul of bullet points about the job
+                jobInfo = job.find('div', class_='job-snippet').find_all('li')
+                jobInfoSnippets = []
+                for item in jobInfo:
+                    jobInfoSnippets.append(item.string)
+                jobLink = 'www.indeed.com' + job['href']
 
-            new_job = {
-                'jobTitle': '' if jobTitle == None else jobTitle,
-                'jobCompany': '' if jobCompany == None else jobCompany,
-                'jobLocation': '' if jobLocation == None else jobLocation,
-                'jobPay': '' if jobPay == None else jobPay,
-                'jobPosted': '' if jobPosted == None else jobPosted,
-                'jobInfoSnippets': '' if jobInfoSnippets == None else jobInfoSnippets,
-                'jobLink': '' if jobLink == None else jobLink,
-            }
-            job_data.append(new_job)
+                new_job = {
+                    'jobId': '' if jobId == None else jobId,
+                    'jobTitle': '' if jobTitle == None else jobTitle,
+                    'jobCompany': '' if jobCompany == None else jobCompany,
+                    'jobLocation': '' if jobLocation == None else jobLocation,
+                    'jobPay': '' if jobPay == None else jobPay,
+                    'jobPosted': '' if jobPosted == None else jobPosted,
+                    'jobInfoSnippets': '' if jobInfoSnippets == None else jobInfoSnippets,
+                    'jobLink': '' if jobLink == None else jobLink,
+                }
+                job_data.append(new_job)
+            except Exception as ex:
+                pass
     return job_data
 
 def main():

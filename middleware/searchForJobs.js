@@ -4,10 +4,10 @@ const path = require('path');
 module.exports = (req, res, next) => {
 
     // let url = 'https://www.indeed.com/jobs?q=react%20developer&explvl=entry_level&sort=date&fromage=14&limit=50';
-    let url = 'https://www.indeed.com/jobs?as_and=react%20developer&jt=all&limit=50&sort&psf=advsrch&from=advancedsearch'
-    // const url = req.body.url;
+    // let url = 'https://www.indeed.com/jobs?as_and=react%20developer&jt=all&limit=50&sort&psf=advsrch&from=advancedsearch'
+    const url = req.body.url;
 
-    res.status(202).send('Request received');
+    // res.status(202).send('Request received');
 
     const childPython = spawn('python3', [path.join(__dirname, '../ind-back-end/web_requests.py'), url]);
 
@@ -24,8 +24,15 @@ module.exports = (req, res, next) => {
     childPython.on('close', (code) => {
         // Turn string of data into a list of jobs
         dataFromPython = dataFromPython.split('\n');
+        // Remove empty last element
+        dataFromPython.pop();
         console.log(`Web search status: ${code}`);
         req.body.data = dataFromPython;
+        const returnData = [];
+        for (const j of dataFromPython) {
+            returnData.push(JSON.parse(j));
+        }
+        res.status(202).send({ 'searchStatus': 'Search Successful', 'data': returnData });
         next();
     });
 };
