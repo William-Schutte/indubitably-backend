@@ -29,7 +29,7 @@ module.exports = (req, res, next) => {
         // Remove empty last element
         dataFromPython.pop();
         // Get job count
-        const jobCount = JSON.parse(dataFromPython.pop());
+        const jobCount = JSON.parse(dataFromPython.pop()).jobCount;
         const returnData = [];
         for (const j of dataFromPython) {
             returnData.push(JSON.parse(j));

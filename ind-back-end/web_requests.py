@@ -27,6 +27,7 @@ def get_more_pages(url, n):
         job_pages.append(page_results)
     return job_pages
 
+
 def parse_job_data_from_pages(l):
     # This works as of 12/18/21
     # Due to the nature of webdevelopment and web-scraping, this will need constant maintenance
@@ -53,18 +54,21 @@ def parse_job_data_from_pages(l):
             return centerIndex
 
     def get_location(locationString):
+        # Returns the location object, will have either 1, 3, or 5 properties
         if locationString == "Remote":
-            return "Remote"
+            return {'remote': True}
         state = re.search(r", [A-Z]{2}", locationString).group(0)
         state = state.replace(', ', '')
         remote = "Remote" in locationString
         city = locationString.split(',')[0]
 
-        index = city_binary_search([city, state], 0, len(cities_master_list) - 1)
+        index = city_binary_search(
+            [city, state], 0, len(cities_master_list) - 1)
         if index == -1:
-            return { 'city': city, 'state': state, 'remote': remote }
+            return {'city': city, 'state': state, 'remote': remote}
         else:
-            return cities_master_list[index]
+            result = cities_master_list[index]
+            return {'city': result[0], 'state': result[1], 'remote': remote, 'latitude': result[2], 'longitude': result[3]}
 
     # Takes a list of pages of job entries
     job_data = []
@@ -74,7 +78,7 @@ def parse_job_data_from_pages(l):
             try:
                 # Job ID, unique identifier from Indeed
                 jobId = job['id']
-                
+
                 # Job Title, name of the job
                 jobTitle = job.find('h2', class_='jobTitle').find_all('span')
                 jobTitle = jobTitle[1].string if len(
@@ -100,16 +104,18 @@ def parse_job_data_from_pages(l):
                     # Then the visible text. E.g. <><span>Posted</span>Today<>
                 jobPosted = job.find('span', class_='date').get_text()
                 if 'Posted' in jobPosted:
-                    jobPosted = { 'type': 'Posted', 'status': jobPosted.replace('Posted', '') }
+                    jobPosted = {'type': 'Posted',
+                                 'status': jobPosted.replace('Posted', '')}
                 elif 'Employer' in jobPosted:
-                    jobPosted = {'type': 'Employer', 'status': jobPosted.replace('Employer', '') }
-                
+                    jobPosted = {'type': 'Employer',
+                                 'status': jobPosted.replace('Employer', '')}
+
                 # Job Info Snippets, ul of bullet points about the position
                 jobInfo = job.find('div', class_='job-snippet').find_all('li')
                 jobInfoSnippets = []
                 for item in jobInfo:
                     jobInfoSnippets.append(item.get_text())
-                
+
                 # Job Link, may be external site or indeed page
                 jobLink = 'http://www.indeed.com' + job['href']
 
