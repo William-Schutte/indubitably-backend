@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
     // Test url:
     // let url = 'https://www.indeed.com/jobs?as_and=react%20developer&jt=all&limit=50&sort&psf=advsrch&from=advancedsearch'
 
-    console.time("Req Start");
+    console.time("Search Request Time");
     const url = req.body.url;
     const childPython = spawn('python3', [path.join(__dirname, '../ind-back-end/web_requests.py'), url]);
     let dataFromPython = "";
@@ -35,7 +35,8 @@ module.exports = (req, res, next) => {
             returnData.push(JSON.parse(j));
         }
 
-        console.timeEnd("Req Start");
+        console.timeEnd("Search Request Time");
+        req.body.data = returnData;
         res.status(202).send({ 'searchStatus': 'Search Successful', 'jobCount': jobCount, 'data': returnData });
         next();
     });
